@@ -1,18 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { protect, admin } = require('../middleware/auth');
-const quizCtrl = require('../controllers/quiz');
+const Quiz = require('../models/Quiz'); // Make sure you have a Quiz model
 
-// Protected route: list quizzes for logged-in users
-router.get('/', protect, quizCtrl.list); 
+// GET /api/quizzes?limit=15
+router.get('/', async (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
 
-// Protected route: get a single quiz by ID
-router.get('/:id', protect, quizCtrl.get); 
+  // Fetch random quizzes from DB
+  const count = await Quiz.countDocuments();
+  const random = Math.max(0, Math.floor(Math.random() * (count - limit)));
 
-// Admin-only routes
-router.post('/', protect, admin, quizCtrl.create);
-router.put('/:id', protect, admin, quizCtrl.update);
-router.delete('/:id', protect, admin, quizCtrl.remove);
-router.post('/:id/questions', protect, admin, quizCtrl.addQuestion);
+  const quizzes = await Quiz.find()
+    .skip(random)
+    .limit(limit)
+    .select('_id question options'); // only send necessary fields
+
+  res.json(quizzes);
+});
 
 module.exports = router;
