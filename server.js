@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 
 dotenv.config();
 connectDB();
+console.log('MONGO_URI:', process.env.MONGO_URI);
 
 const app = express();
 app.use(cors());
@@ -27,4 +28,4 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
