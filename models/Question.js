@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const questionSchema = new mongoose.Schema({
-  text: { type: String, required: true },
-  options: [{ type: String }],
-  correctIndex: { type: Number, required: true },
-  marks: { type: Number, default: 1 }
-}, { timestamps: true });
+  question: String,
+  options: [String],
+  correctAnswer: String,
+});
 
-module.exports = mongoose.model('Question', questionSchema);
+// Explicitly set collection name to match Atlas
+export default mongoose.model('Question', questionSchema, 'questions');

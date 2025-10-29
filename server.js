@@ -1,8 +1,15 @@
-const express = require('express');
-require('express-async-errors'); // handles async errors in routes
-const dotenv = require('dotenv');
-const cors = require('cors');
-const connectDB = require('./config/db');
+// server.js (ES Modules)
+
+import express from 'express';
+import 'express-async-errors'; // handles async errors in routes
+import dotenv from 'dotenv';
+import cors from 'cors';
+import connectDB from './config/db.js';
+
+import questionRoutes from './routes/question.js';
+import authRoutes from './routes/auth.js';
+import quizRoutes from './routes/quiz.js';
+import attemptRoutes from './routes/attempt.js';
 
 dotenv.config();
 connectDB();
@@ -20,10 +27,7 @@ app.get('/', (req, res) => {
 });
 
 // Routes
-const authRoutes = require('./routes/auth');
-const quizRoutes = require('./routes/quiz');
-const attemptRoutes = require('./routes/attempt');
-
+app.use('/api/questions', questionRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/attempts', attemptRoutes);
